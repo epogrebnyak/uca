@@ -82,6 +82,10 @@ class Node:
         shorthand, node = extract_node(doc)
         self[shorthand] = node
 
+    def add_document_draft(self, doc: str):
+        """Process *doc* string without adding to node."""
+        _, _ = extract_node(doc)    
+
     def size(self):
         return len(list(walk(self)))
 
