@@ -1,7 +1,11 @@
 import pytest
 
 from uca import Node, String, Viewer
-from uca.main import get_skills, yield_lines
+from uca.main import get_skills, yield_lines, root_node
+
+
+def test_root_node():
+    assert root_node(title="ABC").content.text.startswith("ABC")
 
 
 @pytest.fixture

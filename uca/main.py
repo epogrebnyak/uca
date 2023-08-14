@@ -1,4 +1,5 @@
 import importlib.metadata
+from datetime import datetime
 from dataclasses import field
 from enum import Enum
 from typing import Dict, List, Tuple
@@ -83,6 +84,12 @@ class Node:
 
     def size(self):
         return len(list(walk(self)))
+
+
+def root_node(title: str) -> Node:
+    date = datetime.now().date().isoformat()
+    s = f"{title} (v{version()}, {date})"
+    return Node(String(s))
 
 
 def extract_skill(text: str) -> Skill:
