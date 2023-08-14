@@ -1,7 +1,7 @@
 import pytest
 
-from uca import Node, String, Viewer
-from uca.main import get_skills, yield_lines, root_node
+from uca import Node, String, Viewer, root_node
+from uca.main import get_skills, yield_lines
 
 
 def test_root_node():
