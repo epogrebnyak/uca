@@ -1,7 +1,7 @@
 uca
 ===
 
-A set of utilities to maintain and enhance a taxonomy of soft skills.
+A set of utilities to maintain a taxonomy of soft skills.
 
 Installation
 ------------

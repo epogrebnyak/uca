@@ -1,9 +1,17 @@
+import importlib.metadata
 from dataclasses import field
 from enum import Enum
 from typing import Dict, List, Tuple
 
 from pydantic.dataclasses import dataclass
 from yaml import safe_load_all as read_yamls  # type: ignore
+
+
+def version(package_name="uca") -> str | None:
+    try:
+        return importlib.metadata.version(package_name)
+    except importlib.metadata.PackageNotFoundError:
+        print(f"{package_name} is not installed")
 
 
 class Language(Enum):
