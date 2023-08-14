@@ -87,12 +87,12 @@ class Node:
 
     @property
     def viewer(self):
-        return Viewer(self.node)
+        return Viewer(self)
 
 
 def root_node(title: str) -> Node:
     date = datetime.now().date().isoformat()
-    s = f"{title} (v{version()}, {date})"
+    s = f"{title} (version {version()}, build date {date})"
     return Node(String(s))
 
 

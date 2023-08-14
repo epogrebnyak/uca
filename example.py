@@ -1,7 +1,7 @@
-from uca.main import Node, String, Viewer
+from uca.main import root_node
 
-skillset = Node(content=String("Skillset Example"))
-doc1 = """
+skillset = root_node("Skillset Example")
+skillset.add_document("""
 title: Personal and emotional skills
 shorthand: PE
 ---
@@ -12,6 +12,5 @@ Positive attitudes:
 Emotional regulation:
 - Stress resistance ~ Capability to handle pressure and adversity.
 - Emotional control
-"""
-skillset.add_document(doc1)
-Viewer(skillset).print()
+""")                      
+skillset.viewer.print()
