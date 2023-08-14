@@ -7,7 +7,7 @@ Installation
 ------------
 
 ```
-pip install get+https://github.com/epogrebnyak/uca.git
+pip install -U git+https://github.com/epogrebnyak/uca.git
 ```
 
 Usage
