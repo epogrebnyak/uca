@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "uca"
-version = "0.0.6"
+version = "0.0.7"
 description = ""
 authors = ["Evgeny Pogrebnyak <e.pogrebnyak@gmail.com>"]
 readme = "README.md"
