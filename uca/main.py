@@ -85,6 +85,10 @@ class Node:
     def size(self):
         return len(list(walk(self)))
 
+    @property
+    def viewer(self):
+        return Viewer(self.node)
+
 
 def root_node(title: str) -> Node:
     date = datetime.now().date().isoformat()
