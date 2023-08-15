@@ -100,14 +100,18 @@ def root_node(title: str) -> Node:
     return Node(String(s))
 
 
-def extract_skill(text: str) -> Skill:
-    if "~" in text:
-        parts = text.split("~")
-        skill_name = parts[0].strip()
-        definition = parts[1].strip()
-    else:
-        skill_name = text
-        definition = ""
+def extract_skill(text: str | Dict) -> Skill:
+    if isinstance(text, dict):
+        skill_name = list(text.keys())[0]
+        definition = list(text.values())[0]
+    if isinstance(text, str):
+        if "~" in text:
+            parts = text.split("~")
+            skill_name = parts[0].strip()
+            definition = parts[1].strip()
+        else:
+            skill_name = text
+            definition = ""
     skill_name = skill_name.capitalize()
     definition = definition.capitalize()
     return Skill(skill_name, definition)
