@@ -2,10 +2,9 @@ import importlib.metadata
 from dataclasses import field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from pydantic.dataclasses import dataclass
-from yaml import safe_load_all as read_yamls  # type: ignore
 
 
 def version(package_name="uca") -> str | None:
@@ -63,7 +62,7 @@ NodeContent = String | Section | Skill
 
 @dataclass
 class Node:
-    content: NodeContent  # string, section or skill
+    content: NodeContent
     children: Dict[str, "Node"] = field(default_factory=dict)
 
     def __getitem__(self, key: str) -> "Node":
@@ -79,12 +78,16 @@ class Node:
         self[title] = Node(content=Skill(title, definition))
 
     def add_document(self, doc: str):
+        from uca.extract import extract_node
+
         shorthand, node = extract_node(doc)
         self[shorthand] = node
 
     def add_document_draft(self, doc: str):
         """Process *doc* string without adding to node."""
-        _, _ = extract_node(doc)    
+        from uca.extract import extract_node
+
+        _, _ = extract_node(doc)
 
     def size(self):
         return len(list(walk(self)))
@@ -98,53 +101,6 @@ def root_node(title: str) -> Node:
     date = datetime.now().date().isoformat()
     s = f"{title} (version {version()}, build date {date})"
     return Node(String(s))
-
-
-def extract_skill(text: str | Dict) -> Skill:
-    if isinstance(text, dict):
-        skill_name = list(text.keys())[0]
-        definition = list(text.values())[0]
-    if isinstance(text, str):
-        if "~" in text:
-            parts = text.split("~")
-            skill_name = parts[0].strip()
-            definition = parts[1].strip()
-        else:
-            skill_name = text
-            definition = ""
-    skill_name = skill_name.capitalize()
-    definition = definition.capitalize()
-    return Skill(skill_name, definition)
-
-
-def extract_node(doc: str) -> Tuple[str, Node]:
-    """
-    Extract section, subsections and skills from *doc* and create a new node.
-
-    The *doc* string should look like below, title and shorthand are mandatory.
-
-    title: Personal and emotional skills
-    shorthand: PE
-    ---
-    Subsection 1:
-    - term A
-    - term B ~ Definition
-    Subsection 2:
-    - term C ~ Other definition
-    - term D
-    - term E
-    """
-    section, content = list(read_yamls(doc))
-    title = section["title"]
-    shorthand = section["shorthand"]
-    node = Node(Section(title, shorthand))
-    for k, (topic, terms) in enumerate(content.items()):
-        tag = shorthand + str(k + 1)
-        node.add_section(topic, tag)
-        for _, term in enumerate(terms):
-            skill = extract_skill(term)
-            node[tag].add_skill(skill.title, skill.definition)
-    return shorthand, node
 
 
 def walk(node: Node):
@@ -177,6 +133,9 @@ class Viewer:
 
     def print(self):
         print_tree(self.node)
+
+    def skills(self):
+        return [content for content in walk(self.node) if isinstance(content, Skill)]
 
     def count_skills(self):
         return len(get_skills(self.node))
